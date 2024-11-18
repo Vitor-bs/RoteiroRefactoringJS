@@ -1,4 +1,4 @@
-class ServicoCalculoFatura {
+module.exports = class ServicoCalculoFatura {
 
   constructor(repo) {
     this.repo = repo;
@@ -51,4 +51,3 @@ class ServicoCalculoFatura {
   }
 
 }
-module.exports = ServicoCalculoFatura;
