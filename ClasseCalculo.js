@@ -1,54 +1,54 @@
 class ServicoCalculoFatura {
 
-      getPeca(pecas, apre) {
-        return pecas[apre.id];
-      }
+  constructor(repo) {
+    this.repo = repo;
+  }
 
-      calcularTotalFatura(pecas, apresentacoes) {
-        return apresentacoes.reduce((total, apre) => {
-          return total + this.calcularTotalApresentacao(pecas, apre);
-        }, 0);
-      }
-      
-      
-      calcularTotalCreditos(pecas, apresentacoes) {
-        return apresentacoes.reduce((total, apre) => {
-          return total + this.calcularCredito(pecas,apre);
-        }, 0);
-      }
-      
-      
-      calcularCredito(pecas, apre) {
-        let creditos = 0;
-        creditos += Math.max(apre.audiencia - 30, 0);
-        if (this.getPeca(pecas, apre).tipo === "comedia") {
-          creditos += Math.floor(apre.audiencia / 5);
-        }
-        return creditos;
-      }
+  calcularTotalFatura(apresentacoes) {
+    return apresentacoes.reduce((total, apre) => {
+      return total + this.calcularTotalApresentacao(apre);
+    }, 0);
+  }
 
-      calcularTotalApresentacao(pecas, apre) {
-        let total = 0;
-      
-        switch (this.getPeca(pecas, apre).tipo) {
-          case "tragedia":
-            total = 40000;
-            if (apre.audiencia > 30) {
-              total += 1000 * (apre.audiencia - 30);
-            }
-            break;
-          case "comedia":
-            total = 30000;
-            if (apre.audiencia > 20) {
-              total += 10000 + 500 * (apre.audiencia - 20);
-            }
-            total += 300 * apre.audiencia;
-            break;
-          default:
-            throw new Error(`Peça desconhecida: ${this.getPeca(pecas, apre).tipo}`);
+
+  calcularTotalCreditos(apresentacoes) {
+    return apresentacoes.reduce((total, apre) => {
+      return total + this.calcularCredito(apre);
+    }, 0);
+  }
+
+
+  calcularCredito(apre) {
+    let creditos = 0;
+    creditos += Math.max(apre.audiencia - 30, 0);
+    if (this.repo.getPeca(apre).tipo === "comedia") {
+      creditos += Math.floor(apre.audiencia / 5);
+    }
+    return creditos;
+  }
+
+  calcularTotalApresentacao(apre) {
+    let total = 0;
+
+    switch (this.repo.getPeca(apre).tipo) {
+      case "tragedia":
+        total = 40000;
+        if (apre.audiencia > 30) {
+          total += 1000 * (apre.audiencia - 30);
         }
-        return total;
-      }
+        break;
+      case "comedia":
+        total = 30000;
+        if (apre.audiencia > 20) {
+          total += 10000 + 500 * (apre.audiencia - 20);
+        }
+        total += 300 * apre.audiencia;
+        break;
+      default:
+        throw new Error(`Peça desconhecida: ${this.repo.getPeca(pecas, apre).tipo}`);
+    }
+    return total;
+  }
 
 }
 module.exports = ServicoCalculoFatura;
